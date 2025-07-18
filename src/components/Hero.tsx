@@ -4,11 +4,12 @@ import Image from 'next/image';
 interface HeroProps {
   onOpenModal: () => void;
 }
+
 const Hero: React.FC<HeroProps> = ({ onOpenModal }) => {
   return (
     <section
       id="home"
-      className="relative flex flex-col items-center justify-center text-center pt-32 md:pt-40 px-5"
+      className="relative flex flex-col items-center justify-center text-center pt-24 md:pt-32 px-5 min-h-screen"
     >
       <div className="relative mb-6">
         <div className="bg-black w-16 h-16 flex items-center justify-center rounded-full shadow-neon">
@@ -35,7 +36,7 @@ const Hero: React.FC<HeroProps> = ({ onOpenModal }) => {
 
       <button
         onClick={onOpenModal}
-        className="mt-8 px-6 py-3 bg-primary text-black font-bold rounded-full shadow-neon"
+        className="mt-8 px-6 py-3 bg-primary text-black font-bold rounded-full shadow-neon hover:bg-primary-accent transition-all duration-200"
       >
         Dapatkan Sekarang
       </button>
