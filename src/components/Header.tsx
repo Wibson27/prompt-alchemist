@@ -18,6 +18,7 @@ const Header: React.FC = () => {
   const activeSection = useActiveSection();
   const [activeHash, setActiveHash] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   useEffect(() => {
     const onHashChange = () => {
       setActiveHash(window.location.hash);
@@ -30,9 +31,12 @@ const Header: React.FC = () => {
   }, []);
 
   return (
-    <header className="sticky top-0  z-10 w-full ">
-      <Container className="!px-0">
-        <nav className="shadow-md md:shadow-none md:bg-transparent mx-auto flex justify-between items-center py-2 px-5 md:py-10">
+    <header className="sticky top-0 z-50 w-full">
+      {/* Header background with backdrop blur */}
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-md border-b border-white/10"></div>
+
+      <Container className="!px-0 relative z-10">
+        <nav className="mx-auto flex justify-between items-center py-4 px-5 md:py-6">
           <Link
             href="/"
             className="flex items-center gap-2"
@@ -59,6 +63,7 @@ const Header: React.FC = () => {
               </li>
             ))}
           </ul>
+
           <div className="hidden md:block">
             <Button
               onClick={() => {
@@ -70,6 +75,7 @@ const Header: React.FC = () => {
               Mulai Sekarang
             </Button>
           </div>
+
           <div className="md:hidden flex items-center">
             <button
               onClick={toggleMenu}
@@ -95,6 +101,7 @@ const Header: React.FC = () => {
         </nav>
       </Container>
 
+      {/* Mobile Menu */}
       <Transition
         show={isOpen}
         enter="transition ease-out duration-200 transform"
@@ -106,7 +113,7 @@ const Header: React.FC = () => {
       >
         <div
           id="mobile-menu"
-          className="md:hidden"
+          className="md:hidden bg-black/90 backdrop-blur-md border-b border-white/10"
         >
           <ul className="flex flex-col space-y-4 pt-1 pb-6 px-6">
             {menuItems.map((item) => (
@@ -131,6 +138,7 @@ const Header: React.FC = () => {
           </ul>
         </div>
       </Transition>
+
       <PromptFormModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
