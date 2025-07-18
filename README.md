@@ -1,7 +1,6 @@
 <div align="center">
-# ⚡ The Prompt Alchemist
-
-
+<h1>⚡ The Prompt Alchemist</h1>
+<br>
 
 ![The Prompt Alchemist](https://img.shields.io/badge/The%20Prompt-Alchemist-00D0D2?style=for-the-badge&logo=lightning&logoColor=white)
 
