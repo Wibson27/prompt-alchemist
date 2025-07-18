@@ -18,7 +18,7 @@ export class EmailService {
   static async testConnection(): Promise<{ success: boolean; error?: string }> {
     try {
       console.log('Testing Supabase connection...');
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('emails')
         .select('count', { count: 'exact', head: true });
 

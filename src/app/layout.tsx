@@ -2,10 +2,9 @@ import type { Metadata } from "next";
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { Source_Sans_3, Manrope } from "next/font/google";
 
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import { AuthProvider } from "@/lib/auth-context";
 import { siteDetails } from '@/data/siteDetails';
+import ConditionalLayout from "@/components/ConditionalLayout";
 
 import "./globals.css";
 
@@ -49,11 +48,9 @@ export default function RootLayout({
       >
         <AuthProvider>
           {siteDetails.googleAnalyticsId && <GoogleAnalytics gaId={siteDetails.googleAnalyticsId} />}
-          <Header />
-          <main>
+          <ConditionalLayout>
             {children}
-          </main>
-          <Footer />
+          </ConditionalLayout>
         </AuthProvider>
       </body>
     </html>
