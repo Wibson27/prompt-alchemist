@@ -1,4 +1,6 @@
+<div align="center">
 # ⚡ The Prompt Alchemist
+</div>
 
 <div align="center">
 
@@ -12,7 +14,7 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=flat-square&logo=vercel&logoColor=white)](https://vercel.com/)
 
-[🚀 Live Demo](https://prompt-alchemist.vercel.app) • [📖 Documentation](#-table-of-contents) • [🐛 Report Bug](https://github.com/zaizabih/prompt-alchemist/issues) • [✨ Request Feature](https://github.com/zaizabih/prompt-alchemist/issues)
+[🚀 Live Demo](https://prompt-alchemist-blue.vercel.app/) • [📖 Documentation](#-table-of-contents) • [🐛 Report Bug](https://github.com/zaizabih/prompt-alchemist/issues) • [✨ Request Feature](https://github.com/zaizabih/prompt-alchemist/issues)
 
 </div>
 
