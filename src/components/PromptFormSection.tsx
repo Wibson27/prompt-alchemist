@@ -2,6 +2,7 @@
 
 import { useState, FormEvent, useEffect } from 'react';
 import { IoClose } from 'react-icons/io5';
+import { EmailService } from '@/lib/email-service';
 
 interface PromptFormModalProps {
   isOpen: boolean;
@@ -13,15 +14,39 @@ const PromptFormModal: React.FC<PromptFormModalProps> = ({
   onClose,
 }) => {
   const [email, setEmail] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState<{type: 'success' | 'error', text: string} | null>(null);
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    console.log('Email submitted:', email);
-    onClose();
+    setIsLoading(true);
+    setMessage(null);
+
+    const result = await EmailService.submitEmail(email);
+
+    if (result.success) {
+      setMessage({ type: 'success', text: 'Email berhasil didaftarkan! 🎉' });
+      setEmail('');
+      setTimeout(() => {
+        onClose();
+      }, 2000);
+    } else {
+      // Now TypeScript knows result.error exists because success is false
+      setMessage({
+        type: 'error',
+        text: result.error.includes('duplicate')
+          ? 'Email sudah terdaftar!'
+          : 'Terjadi kesalahan. Silakan coba lagi.'
+      });
+    }
+
+    setIsLoading(false);
   };
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      setMessage(null);
     } else {
       document.body.style.overflow = '';
     }
@@ -30,6 +55,7 @@ const PromptFormModal: React.FC<PromptFormModalProps> = ({
       document.body.style.overflow = '';
     };
   }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
@@ -38,6 +64,7 @@ const PromptFormModal: React.FC<PromptFormModalProps> = ({
         <button
           onClick={onClose}
           className="absolute top-5 right-5 text-gray-400 hover:text-white"
+          disabled={isLoading}
         >
           <IoClose size={28} />
         </button>
@@ -63,23 +90,32 @@ const PromptFormModal: React.FC<PromptFormModalProps> = ({
           Kirim ke mana akses eksklusif ini?
         </p>
 
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-6"
-        >
+        {message && (
+          <div className={`mb-6 p-4 rounded-lg ${
+            message.type === 'success'
+              ? 'bg-green-500/20 text-green-300 border border-green-500/30'
+              : 'bg-red-500/20 text-red-300 border border-red-500/30'
+          }`}>
+            {message.text}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-6">
           <input
             type="email"
             placeholder="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full px-5 py-4 rounded-full text-black placeholder-gray-500 text-lg focus:outline-none"
+            disabled={isLoading}
+            className="w-full px-5 py-4 rounded-full text-black placeholder-gray-500 text-lg focus:outline-none disabled:opacity-50"
           />
           <button
             type="submit"
-            className="px-6 py-4 rounded-xl bg-primary-accent shadow-neon font-bold text-black text-base sm:text-lg transition mx-auto "
+            disabled={isLoading}
+            className="px-6 py-4 rounded-xl bg-primary-accent shadow-neon font-bold text-black text-base sm:text-lg transition mx-auto disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Dapatkan Akses Pertama
+            {isLoading ? 'Mengirim...' : 'Dapatkan Akses Pertama'}
           </button>
         </form>
       </div>
