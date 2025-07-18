@@ -1,20 +1,21 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import { EmailService } from '@/lib/email-service';
+import ProtectedRoute from '@/components/ProtectedRoute';
+import { EmailService } from '@/lib/email-service'; // ← Fixed import
+import { useAuth } from '@/lib/auth-context';
 import { EmailRecord } from '@/lib/supabase';
 
 const DashboardPage: React.FC = () => {
   const [emails, setEmails] = useState<EmailRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { user, signOut } = useAuth();
 
   useEffect(() => {
     const fetchEmails = async () => {
       try {
-        const emailData = await EmailService.getAllEmails();
+        const emailData = await EmailService.getAllEmails(); // ← Fixed usage
         setEmails(emailData);
       } catch (err) {
         setError('Failed to load emails');
@@ -27,6 +28,10 @@ const DashboardPage: React.FC = () => {
     fetchEmails();
   }, []);
 
+  const handleSignOut = async () => {
+    await signOut();
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('id-ID', {
       year: 'numeric',
@@ -38,14 +43,26 @@ const DashboardPage: React.FC = () => {
   };
 
   return (
-    <>
-      <Header />
-      <main className="min-h-screen bg-background text-foreground py-16 px-4">
+    <ProtectedRoute>
+      <div className="min-h-screen bg-background text-foreground py-16 px-4">
         <div className="max-w-4xl mx-auto bg-[#181C2A] rounded-2xl shadow-lg p-8">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-3xl font-bold text-primary">Dashboard Email</h1>
-            <div className="text-sm text-white/60">
-              Total: {emails.length} email{emails.length !== 1 ? 's' : ''}
+            <div>
+              <h1 className="text-3xl font-bold text-primary">Dashboard Email</h1>
+              <p className="text-sm text-white/60 mt-1">
+                Welcome, {user?.email}
+              </p>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="text-sm text-white/60">
+                Total: {emails.length} email{emails.length !== 1 ? 's' : ''}
+              </div>
+              <button
+                onClick={handleSignOut}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm"
+              >
+                Sign Out
+              </button>
             </div>
           </div>
 
@@ -95,9 +112,8 @@ const DashboardPage: React.FC = () => {
             </div>
           )}
         </div>
-      </main>
-      <Footer />
-    </>
+      </div>
+    </ProtectedRoute>
   );
 };
 
